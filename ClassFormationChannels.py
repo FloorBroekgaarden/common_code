@@ -2,6 +2,7 @@ import numpy as np
 import h5py as h5 #for reading in data
 from collections import Counter
 import os
+
 class FormationChannels(object):
 
     def __init__(self, path = 'setPath', deleteColumns=[], \

@@ -1,4 +1,4 @@
-from __future__ import division # in case this script is used in python 2 
+# from __future__ import division # in case this script is used in python 2 
 import h5py as h5
 
 import os
@@ -37,7 +37,7 @@ from astropy import constants as const
 
 from scipy.spatial.distance import cdist
 
-from KDEpy import FFTKDE
+# from KDEpy import FFTKDE
 from scipy.stats import norm
 
 
@@ -63,7 +63,8 @@ rc('axes', linewidth=2)
 
 
 def layoutAxes(ax, nameX='', nameY='', \
-               labelSizeMajor = 10, fontsize = 25, second=False, labelpad=None, setMinor=True, ):
+               labelSizeMajor = 10, fontsize = 25, second=False, labelpad=None, setMinor=True, labelpad_x=None, labelpad_y=None,\
+               noXticks=False, noYticks=False):
     """
     Tiny code to do the layout for axes in matplotlib
     """
@@ -71,6 +72,12 @@ def layoutAxes(ax, nameX='', nameY='', \
     tickLengthMinor = 5
     tickWidthMajor  = 1.5
     tickWidthMinor  = 1.5
+
+
+    if labelpad:
+        labelpad_x = labelpad
+        labelpad_y = labelpad
+
     
     #rc('axes', linewidth=2)
     #label1 always refers to first axis not the twin 
@@ -95,23 +102,32 @@ def layoutAxes(ax, nameX='', nameY='', \
 
 
     if labelSizeMajor==10:
-        ax.set_xlabel(nameX, fontsize=fontsize,labelpad=labelpad)#,fontweight='bold')
-        ax.set_ylabel(nameY, fontsize=fontsize,labelpad=labelpad)#, fontweight='bold')    
+        ax.set_xlabel(nameX, fontsize=fontsize,labelpad=labelpad_x)#,fontweight='bold')
+        ax.set_ylabel(nameY, fontsize=fontsize,labelpad=labelpad_y)#, fontweight='bold')    
     else:
-        ax.set_xlabel(nameX, fontsize=labelSizeMajor,labelpad=labelpad)#,fontweight='bold')
-        ax.set_ylabel(nameY, fontsize=labelSizeMajor,labelpad=labelpad)#, fontweight='bold')  
+        ax.set_xlabel(nameX, fontsize=labelSizeMajor,labelpad=labelpad_x)#,fontweight='bold')
+        ax.set_ylabel(nameY, fontsize=labelSizeMajor,labelpad=labelpad_y)#, fontweight='bold')  
 
     if setMinor==True:
         # add minor ticks:
         ax.xaxis.set_minor_locator(AutoMinorLocator())
         ax.yaxis.set_minor_locator(AutoMinorLocator())
 
+    # new do not plot ticks if nameX is none
+    if  (noXticks==True):
+        ax.set_xticklabels( () )
+        ax.set_xticks([])
+    if (noYticks==True):
+        ax.set_yticks([])
+        ax.set_yticklabels( () ) 
+
     return ax
 
 
 
 def layoutAxesNoXandYlabel(ax, nameX='', nameY='', \
-               labelSizeMajor = 10, fontsize = 25, second=False, labelpad=None):
+               labelSizeMajor = 10, fontsize = 25, second=False, labelpad=None, setMinor=True, labelpad_x=None, labelpad_y=None,\
+               noXticks=False, noYticks=False):
     """
     Tiny code to do the layout for axes in matplotlib
     """
@@ -148,11 +164,23 @@ def layoutAxesNoXandYlabel(ax, nameX='', nameY='', \
         ax.xaxis.set_minor_locator(AutoMinorLocator())
         ax.yaxis.set_minor_locator(AutoMinorLocator())
 
+
+    # new do not plot ticks if nameX is none
+    if  (noXticks==True):
+        ax.set_xticklabels( () )
+        ax.set_xticks([])
+    if (noYticks==True):
+        ax.set_yticks([])
+        ax.set_yticklabels( () ) 
+
+
+
     return ax
 
 
 def layoutAxesNoXlabel(ax, nameX='', nameY='', \
-               labelSizeMajor = 10, fontsize = 25, second=False, labelpad=None, setMinor=True, rotation=90):
+               labelSizeMajor = 10, fontsize = 25, second=False, labelpad=None, setMinor=True, rotation=90,\
+               noXticks=False, noYticks=False):
     """
     Tiny code to do the layout for axes in matplotlib
     """
@@ -190,6 +218,13 @@ def layoutAxesNoXlabel(ax, nameX='', nameY='', \
         ax.set_ylabel(nameY, fontsize=labelSizeMajor,labelpad=labelpad)#, fontweight='bold')     
 
 
+    # new do not plot ticks if nameX is none
+    if  (noXticks==True):
+        ax.set_xticklabels( () )
+        ax.set_xticks([])
+    if (noYticks==True):
+        ax.set_yticks([])
+        ax.set_yticklabels( () ) 
 
 
     if setMinor==True:
@@ -205,7 +240,8 @@ def layoutAxesNoXlabel(ax, nameX='', nameY='', \
 
 
 def layoutAxesNoYlabel(ax, nameX='', nameY='', \
-               labelSizeMajor = 10, fontsize = 25, second=False, labelpad=None, setMinor=True, rotation=0):
+               labelSizeMajor = 10, fontsize = 25, second=False, labelpad=None, setMinor=True, rotation=0,\
+               noXticks=False, noYticks=False):
     """
     Tiny code to do the layout for axes in matplotlib
     """
@@ -213,6 +249,8 @@ def layoutAxesNoYlabel(ax, nameX='', nameY='', \
     tickLengthMinor = 5
     tickWidthMajor  = 1.5
     tickWidthMinor  = 1.5
+
+
     
     #rc('axes', linewidth=2)
     #label1 always refers to first axis not the twin 
@@ -241,6 +279,16 @@ def layoutAxesNoYlabel(ax, nameX='', nameY='', \
         # add minor ticks:
         ax.xaxis.set_minor_locator(AutoMinorLocator())
         ax.yaxis.set_minor_locator(AutoMinorLocator())
+
+     # new do not plot ticks if nameX is none
+    if  (noXticks==True):
+        ax.set_xticklabels( () )
+        ax.set_xticks([])
+    if (noYticks==True):
+        ax.set_yticks([])
+        ax.set_yticklabels( () ) 
+
+
 
     return ax
 
@@ -1628,7 +1676,7 @@ for ind_SFR, SFR in enumerate(SFRs):
             MSSFRnameslist.append('%s%s%s'%(ind_x, ind_y, ind_z))
             
            
-print('obtain index of the SFRD models that we want to highlight')
+
 
 MSSFRnameslistCSV = ['.0.0.0', '.1.1.1', '.1.1.2', '.1.1.3', '.1.2.1', '.1.2.2', '.1.2.3', '.1.3.1', '.1.3.2', '.1.3.3', '.2.1.1', '.2.1.2', '.2.1.3', '.2.2.1', '.2.2.2', '.2.2.3', '.2.3.1', '.2.3.2', '.2.3.3', '.3.1.1', '.3.1.2', '.3.1.3', '.3.2.1', '.3.2.2', '.3.2.3', '.3.3.1', '.3.3.2', '.3.3.3']
         
@@ -1651,6 +1699,26 @@ def adjust_lightness(color, amount=0.5):
     return colorsys.hls_to_rgb(c[0], max(0, min(1, amount * c[1])), c[2])
 # colors = ['#1f77b4', '#ff7f0e']
 # colors_lighter = [adjust_lightness(color=colors[0], amount=2.2),adjust_lightness(color=colors[1], amount=1.7)]
+
+
+
+
+# Functions for metallicity yields 
+solar=0.0142
+metallicity_vlines_values_list = [np.log10(solar), np.log10(0.5*solar),np.log10(0.2*solar), np.log10(0.1*solar), np.log10(0.001)]#, np.log10(0.0105)]
+metallicity_vlines_text_list = [r'$Z_{\rm{i}}=Z_{\odot}$', r'$Z_{\rm{i}}=Z_{\odot}/2$', \
+             r'$Z_{\rm{i}}=Z_{\odot}/5$',  r'$Z_{\rm{i}}=Z_{\odot}/10$',\
+             r'$Z_{\rm{i}}=0.001$'] #, r'$Z_{\rm{i}}=0.0105$']  
+metallicities_list = [0.0001, 0.00011, 0.00012, 0.00014, 0.00016, 0.00017,\
+   0.00019, 0.00022, 0.00024, 0.00027, 0.0003, 0.00034, \
+   0.00037, 0.00042, 0.00047, 0.00052, 0.00058, 0.00065,\
+   0.00073, 0.00081, 0.0009, 0.00101, 0.00113, 0.00126,\
+   0.0014, 0.00157, 0.00175, 0.00195, 0.00218, 0.00243, \
+   0.00272, 0.00303, 0.00339, 0.00378, 0.00422, 0.00471, \
+   0.00526, 0.00587, 0.00655, 0.00732, 0.00817, 0.00912, \
+   0.01018, 0.01137, 0.01269, 0.01416, 0.01581, 0.01765, 0.01971, 0.022, 0.0244, 0.02705, 0.03]
+
+
 
 
 
