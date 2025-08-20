@@ -42,6 +42,62 @@ from scipy.stats import norm
 
 
 
+
+## For SSPC use ##
+
+def get_primary_secondary(m1, m2):
+    """
+    Return (primary, secondary) where primary >= secondary element-wise.
+    Works with scalars, lists, or numpy arrays.
+    """
+    m1_arr = np.asarray(m1)
+    m2_arr = np.asarray(m2)
+
+    primary = np.maximum(m1_arr, m2_arr)
+    secondary = np.minimum(m1_arr, m2_arr)
+
+    # if inputs were scalars, return scalars instead of arrays
+    if np.isscalar(m1) and np.isscalar(m2):
+        return primary.item(), secondary.item()
+    return primary, secondary
+
+
+
+def chirp_mass(m1, m2):
+    """
+    Compute the chirp mass given component masses m1 and m2.
+    
+    Parameters
+    ----------
+    m1, m2 : float, list, or np.ndarray
+        Component masses (order does not matter).
+    
+    Returns
+    -------
+    Mc : float or np.ndarray
+        Chirp mass.
+    """
+    m1_arr = np.asarray(m1, dtype=float)
+    m2_arr = np.asarray(m2, dtype=float)
+
+    mc = (m1_arr * m2_arr)**(3/5) / (m1_arr + m2_arr)**(1/5)
+
+    # return scalar if inputs were scalars
+    if np.isscalar(m1) and np.isscalar(m2):
+        return mc.item()
+    return mc
+
+
+
+## For SSPC use ##
+
+
+
+
+
+
+
+
 rc('font', family='serif', weight = 'bold')
 rc('text', usetex=True)
 # matplotlib.rcParams['text.latex.preamble']=[r"\usepackage{amsmath}"]
